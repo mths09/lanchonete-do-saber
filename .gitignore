@@ -426,3 +426,10 @@ FodyWeavers.xsd
 
 # Official VS Code C# Dev Kit Extension exclusion
 #*.lscache
+
+# Dados gerados pelo app (contêm nomes de clientes, não versionar)
+pedido.xml
+pedidos.xml
+
+# Pacotes locais (o executável vai em GitHub Releases)
+*.zip
