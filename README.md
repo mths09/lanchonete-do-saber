@@ -10,8 +10,9 @@
 ![Demonstração](docs/screenshots/demo.gif)
 
 ## 📌 Sobre
-Duas ou três frases: o problema que resolve (agilizar o registro de pedidos),
-para quem é, e o contexto (projeto acadêmico / estudo / portfólio).
+Projeto acadêmico desenvolvido com o objetivo de criar um aplicativo Windows Form para agilizar registros de pedidos. 
+Foi realizado com o objetivo de aprimorar conhecimentos no desenvolvimento de sistemas e aprendizagem de funcionalidades da linguagem C#, 
+como validações dos campos, ações de botões, DataGrids, além de aprender melhor sobre Programação Orientada a Objetos (POO).
 
 ## ✨ Funcionalidades
 - [x] Abertura de novo pedido com número e data/hora
@@ -22,7 +23,7 @@ para quem é, e o contexto (projeto acadêmico / estudo / portfólio).
 ## 🖼️ Telas
 | Dados do pedido | Itens | Resumo |
 |---|---|---|
-| ![](docs/screenshots/dados.png) | ![](docs/screenshots/itens.png) | ![](docs/screenshots/resumo.png) |
+| ![](docs/screenshots/dados.jpeg) | ![](docs/screenshots/itens.jpeg) | ![](docs/screenshots/resumo.jpeg) |
 
 ## 🛠️ Tecnologias
 - C# · Windows Forms · .NET Framework 4.8
@@ -33,7 +34,7 @@ para quem é, e o contexto (projeto acadêmico / estudo / portfólio).
 *Desenvolvimento para desktop com .NET*) e .NET Framework 4.8.
 
 ```bash
-git clone https://github.com/SEU-USUARIO/lanchonete-sabida.git
+git clone https://github.com/mths09/lanchonete-sabida.git
 ```
 1. Abra `LanchoneteSabida.sln` no Visual Studio.
 2. Pressione `F5`.
@@ -52,7 +53,9 @@ LanchoneteSabida/
 ## 📋 Regras de negócio
 - Cada pedido recebe um número sequencial.
 - Complementos só são habilitados para lanches.
-- (descreva as regras que o sistema aplica)
+- Adiciona e Remove lanches e bebidas.
+- Calcula o valor total dos pedidos.
+- Não permite criar pedido sem usar o botão "Novo Pedido".
 
 ## 🗺️ Roadmap
 - [ ] Gravação de pedidos em XML estável
@@ -62,10 +65,12 @@ LanchoneteSabida/
 - [ ] Migração para .NET moderno
 
 ## 📚 Aprendizados
-Em poucas linhas: o que você praticou (eventos, DataGridView, XML, regras
-de negócio). Isso conta ponto em entrevista.
+Neste projeto, aprendi muitas funcionalidades novas em C#, como a manipular melhor os eventos dos objetos e o que cada um faz.
+Aprendi também sobre como manipular os dados em um DataGridView, como adicionar via botão e também como removê-los.
+Entendi como funciona melhor o tratamento de dados recebidos e como adicionar dados automaticamente nos campos por meio dos eventos.
+Além disso também vi uma nova funcionalidade, utilizando  `XmlWriter`.
 
-## 👤 Autor
+## 👤 Autor 
 **Matheus Ferenci Miranda Leitão** 
 · [LinkedIn](https://www.linkedin.com/in/matheus-ferenci-miranda-leit%C3%A3o-a611b9374/) 
 · [Portfólio](https://github.com/mths09/lanchonete-do-saber) 
