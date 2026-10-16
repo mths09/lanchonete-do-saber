@@ -169,26 +169,32 @@ namespace LanchoneteSabida
         private void cmbLanche_SelectedIndexChanged(object sender, EventArgs e)
         {
             numQtdLanche.Enabled = true;
+            btnAddLanche.Enabled = true;
 
             cmbPrecoL.SelectedIndex = cmbLanche.SelectedIndex;
             numQtdLanche.Text = "1";
 
             if (cmbPrecoL.Text != "")
             {
-                lblTotalL.Text = (double.Parse(cmbPrecoL.Text.Substring(2))
-                    * int.Parse(numQtdLanche.Text)).ToString("C");
+                decimal preco = decimal.Parse(cmbPrecoL.Text.Substring(2));
+                decimal quantidade = numQtdLanche.Value;
+
+                lblTotalL.Text = (preco * quantidade).ToString("C");
+
                 numQtdLanche.Focus();
             }
         }
 
         private void numQtdLanche_ValueChanged(object sender, EventArgs e)
         {
-            if (numQtdLanche.Text == "0" || numQtdLanche.Text == "")
+            if (cmbPrecoL.Text != "")
             {
-                numQtdLanche.Text = "1";
+                decimal preco = decimal.Parse(cmbPrecoL.Text.Substring(2));
+                decimal quantidade = numQtdLanche.Value;
+
+                lblTotalL.Text = (preco * quantidade).ToString("C");
+                numQtdLanche.Focus();
             }
-            lblTotalL.Text = (double.Parse(cmbPrecoL.Text.Substring(2))
-                * int.Parse(numQtdLanche.Text)).ToString("C");
         }
 
         private void btnAddLanche_Click(object sender, EventArgs e)
@@ -242,26 +248,31 @@ namespace LanchoneteSabida
 
         private void numQtdBebida_ValueChanged(object sender, EventArgs e)
         {
-            if (numQtdBebida.Text == "0" || numQtdBebida.Text == "")
+            if (cmbPrecoB.Text != "")
             {
-                numQtdBebida.Text = "1";
-            }
+                decimal preco = decimal.Parse(cmbPrecoB.Text.Substring(2));
+                decimal quantidade = numQtdBebida.Value;
 
-            lblTotalB.Text = (double.Parse(cmbPrecoB.Text.Substring(2))
-                * int.Parse(numQtdBebida.Text)).ToString("C");
+                lblTotalB.Text = (preco * quantidade).ToString("C");
+                numQtdLanche.Focus();
+            }
         }
 
         private void cmbBebidas_SelectedIndexChanged(object sender, EventArgs e)
         {
             numQtdBebida.Enabled = true;
+            button5.Enabled = true;
 
             cmbPrecoB.SelectedIndex = cmbBebidas.SelectedIndex;
             numQtdBebida.Text = "1";
 
             if (cmbPrecoB.Text != "")
             {
-                lblTotalB.Text = (double.Parse(cmbPrecoB.Text.Substring(2))
-                    * int.Parse(numQtdBebida.Text)).ToString("C");
+                decimal preco = decimal.Parse(cmbPrecoB.Text.Substring(2));
+                decimal quantidade = numQtdBebida.Value;
+
+                lblTotalB.Text = (preco * quantidade).ToString("C");
+
                 numQtdBebida.Focus();
             }
         }
