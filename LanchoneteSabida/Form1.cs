@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-
+using System.Globalization;
 
 namespace LanchoneteSabida
 {
@@ -66,7 +66,17 @@ namespace LanchoneteSabida
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            dgvPedidos.Columns[3].DefaultCellStyle.Format = "C2";
+            dgvPedidos.Columns[3].DefaultCellStyle.FormatProvider =
+                new CultureInfo("pt-BR");
 
+            dgvPedidos.Columns[4].DefaultCellStyle.Format = "C2";
+            dgvPedidos.Columns[4].DefaultCellStyle.FormatProvider =
+                new CultureInfo("pt-BR");
+
+            lblTotal.Text = 0m.ToString(
+                "C2",
+                new CultureInfo("pt-BR"));
         }
 
         private void label4_Click(object sender, EventArgs e)
@@ -135,20 +145,6 @@ namespace LanchoneteSabida
 
         }
 
-
-        private void button5_Click(object sender, EventArgs e) // Botao Add Bebida
-        {
-            dgvPedidos.Rows.Add(++contItem, cmbBebidas.SelectedItem,
-                numQtdBebida.Text,
-                cmbPrecoB.SelectedItem,
-                lblTotalB.Text.Substring(2)
-            );
-            lblTotal.Text =
-                (double.Parse(lblTotal.Text.Substring(3)) +
-                double.Parse(lblTotalB.Text.Substring(2))).ToString("C");
-            dgvPedidos.FirstDisplayedScrollingRowIndex = dgvPedidos.Rows.Count - 1;
-        }
-
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
@@ -164,6 +160,40 @@ namespace LanchoneteSabida
             contItem = 0;
             dgvItens.Rows.Clear();
             tabControl_Detalhes.SelectedTab = tpItens;
+        }
+
+        // Método para Atualizar total do pedido
+        private void AtualizarTotalPedido()
+        {
+            decimal totalPedido = 0;
+            CultureInfo cultura = new CultureInfo("pt-BR");
+
+            foreach(DataGridViewRow linha in dgvPedidos.Rows)
+            {
+                if (linha.IsNewRow)
+                    continue;
+
+                object valorCelula = linha.Cells[4].Value;
+
+                if (valorCelula == null)
+                    continue;
+
+                if(valorCelula is decimal valorDecimal)
+                {
+                    totalPedido += valorDecimal;
+                }
+                else if (decimal.TryParse(
+                        valorCelula.ToString(),
+                        NumberStyles.Currency,
+                        cultura,
+                        out decimal valorItem
+                        ))
+                {
+                    totalPedido += valorItem;
+                }
+            }
+
+            lblTotal.Text = totalPedido.ToString("C2", cultura);
         }
 
         private void cmbLanche_SelectedIndexChanged(object sender, EventArgs e)
@@ -199,31 +229,46 @@ namespace LanchoneteSabida
 
         private void btnAddLanche_Click(object sender, EventArgs e)
         {
-            dgvPedidos.Rows.Add(++contItem,
-                cmbLanche.SelectedItem,
-                numQtdLanche.Text,
-                cmbPrecoL.SelectedItem,
-                lblTotalL.Text.Substring(2)
+            if (cmbLanche.SelectedIndex < 0)
+            {
+                MessageBox.Show("Selecione um lanche.");
+                return;
+            }
+
+            decimal precoUnitario = decimal.Parse(
+                cmbPrecoL.Text,
+                NumberStyles.Currency,
+                new CultureInfo("pt-BR")
             );
-            lblTotal.Text =
-                (double.Parse(lblTotal.Text.Substring(3)) +
-                double.Parse(lblTotalL.Text.Substring(2))).ToString("C");
-            dgvPedidos.FirstDisplayedScrollingRowIndex = dgvPedidos.Rows.Count - 1;
+
+            decimal quantidade = numQtdLanche.Value;
+            decimal totalItem = precoUnitario * quantidade;
+
+            dgvPedidos.Rows.Add(
+                ++contItem,
+                cmbLanche.SelectedItem,
+                quantidade,
+                precoUnitario,
+                totalItem
+            );
+            AtualizarTotalPedido();
+
 
             if (rdbCondSim.Checked)
             {
                 grpOpcoesCond.Enabled = true;
-                // dgvItens.Rows.Add("", "Condimentos", "", "", "");
-                // string condimentos = "";
 
                 foreach (CheckBox cb in grpOpcoesCond.Controls)
                 {
                     if (cb.Checked)
                         dgvItens.Rows.Add("->", cb.Text, "", "", "");
-                    // condimentos += cb.Text + " | ";
                 }
 
             }
+
+            // DataGridView vai até ultima linha adicionada
+            dgvPedidos.FirstDisplayedScrollingRowIndex =
+                dgvPedidos.Rows.Count - 1;
         }
 
         private void groupBox3_Enter(object sender, EventArgs e)
@@ -277,6 +322,37 @@ namespace LanchoneteSabida
             }
         }
 
+        private void button5_Click(object sender, EventArgs e) // Botao Add Bebida
+        {
+            if (cmbBebidas.SelectedIndex < 0)
+            {
+                MessageBox.Show("Selecione uma bebida.");
+                return;
+            }
+
+            decimal precoUnitario = decimal.Parse(
+                cmbPrecoB.Text,
+                NumberStyles.Currency,
+                new CultureInfo("pt-BR"));
+
+            decimal quantidade = numQtdBebida.Value;
+            decimal totalItem = precoUnitario * quantidade;
+
+            dgvPedidos.Rows.Add(
+                ++contItem,
+                cmbBebidas.SelectedItem,
+                quantidade,
+                precoUnitario,
+                totalItem
+            );
+
+            AtualizarTotalPedido();
+
+            // DataGridView vai até ultima linha adicionada
+            dgvPedidos.FirstDisplayedScrollingRowIndex =
+                dgvPedidos.Rows.Count - 1;
+        }
+
         private void btnRemoveLanche_Click(object sender, EventArgs e)
         {
             if (dgvPedidos.SelectedRows.Count == 0) // Verifica se tem linha selecionada
@@ -284,17 +360,10 @@ namespace LanchoneteSabida
                 MessageBox.Show("Selecione um item para remover.");
                 return;
             }
-
             
             DataGridViewRow linhaSelecionada = dgvPedidos.SelectedRows[0]; // Guarda a linha selecionada
-            double valor = double.Parse(linhaSelecionada.Cells[4].Value.ToString()); // Le o valor da linha
-            // cells: colecao de linha
-
-            // Remover a Linha
             dgvPedidos.Rows.Remove(linhaSelecionada);
-            // Subtrai o valor do total
-            lblTotal.Text = (double.Parse(lblTotal.Text.Substring(3)) - valor).ToString("C");
-            contItem--;
+            AtualizarTotalPedido();
         }
 
         private void groupBox4_Enter(object sender, EventArgs e)
@@ -320,16 +389,9 @@ namespace LanchoneteSabida
                 return;
             }
 
-
             DataGridViewRow linhaSelecionada = dgvPedidos.SelectedRows[0]; // Guarda a linha selecionada
-            double valor = double.Parse(linhaSelecionada.Cells[4].Value.ToString()); // Le o valor da linha
-            // cells: colecao de linha
-
-            // Remover a Linha
             dgvPedidos.Rows.Remove(linhaSelecionada);
-            // Subtrai o valor do total
-            lblTotal.Text = (double.Parse(lblTotal.Text.Substring(3)) - valor).ToString("C");
-            contItem--;
+            AtualizarTotalPedido();
         }
 
         private void btnXML_Click(object sender, EventArgs e)
