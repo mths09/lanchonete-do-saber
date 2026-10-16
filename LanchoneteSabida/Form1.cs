@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using System.Globalization;
+
 
 namespace LanchoneteSabida
 {
@@ -23,6 +23,10 @@ namespace LanchoneteSabida
             InitializeComponent();
         }
 
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
 
         private void button1_Click(object sender, EventArgs e) // Botao Novo Pedido
         {
@@ -45,8 +49,27 @@ namespace LanchoneteSabida
             txtCliente.Focus();
         }
 
+        private void button7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCamcelar_Click(object sender, EventArgs e)
+        {
+
+        }
 
         private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
         {
 
         }
@@ -67,6 +90,10 @@ namespace LanchoneteSabida
 
         }
 
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
 
         private void label5_Click_1(object sender, EventArgs e)
         {
@@ -81,6 +108,11 @@ namespace LanchoneteSabida
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             grpOpcoesCond.Enabled = true;
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+
         }
 
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
@@ -107,7 +139,7 @@ namespace LanchoneteSabida
         private void button5_Click(object sender, EventArgs e) // Botao Add Bebida
         {
             dgvPedidos.Rows.Add(++contItem, cmbBebidas.SelectedItem,
-                numQtdBebida.Text,
+                txtQtdB.Text,
                 cmbPrecoB.SelectedItem,
                 lblTotalB.Text.Substring(2)
             );
@@ -134,67 +166,34 @@ namespace LanchoneteSabida
             tabControl_Detalhes.SelectedTab = tpItens;
         }
 
-        // Calcular total do pedido
-        private void AtualizarTotalPedido()
-        {
-            decimal totalPedido = 0;
-            CultureInfo cultura = new CultureInfo("pt-BR");
-
-            foreach (DataGridViewRow linha in dgvPedidos.Rows)
-            {
-                if (linha.IsNewRow) 
-                    continue; 
-
-                object valorCelula = linha.Cells[4].Value;
-
-                if(valorCelula != null &&
-                    decimal.TryParse(
-                        valorCelula.ToString(),
-                        NumberStyles.Currency, 
-                        cultura, 
-                        out decimal valorItem))
-                {
-                    totalPedido += valorItem;
-                }
-            }
-            lblTotal.Text = totalPedido.ToString("C2", cultura);
-        }
-
         private void cmbLanche_SelectedIndexChanged(object sender, EventArgs e)
         {
-            btnAddLanche.Enabled = true;
-            numQtdLanche.Enabled = true;
-
             cmbPrecoL.SelectedIndex = cmbLanche.SelectedIndex;
-            numQtdLanche.Value = 1;
+            txtQtdL.Text = "1";
 
             if (cmbPrecoL.Text != "")
             {
-                decimal preco = decimal.Parse(cmbPrecoL.Text.Substring(2));
-                decimal quantidade = numQtdLanche.Value;
-
-                lblTotalL.Text = (preco * quantidade).ToString("C");
-
-                numQtdLanche.Focus();
+                lblTotalL.Text = (double.Parse(cmbPrecoL.Text.Substring(2))
+                    * int.Parse(txtQtdL.Text)).ToString("C");
+                txtQtdL.Focus();
             }
         }
 
-        private void numQtdLanche_ValueChanged(object sender, EventArgs e)
+        private void txtQtdL_TextChanged(object sender, EventArgs e)
         {
-            if (cmbPrecoL.Text != "")
+            if (txtQtdL.Text == "0" || txtQtdL.Text == "")
             {
-                decimal preco = decimal.Parse(cmbPrecoL.Text.Substring(2));
-                decimal quantidade = numQtdLanche.Value;
-
-                lblTotalL.Text = (preco * quantidade).ToString("C");
+                txtQtdL.Text = "1";
             }
+            lblTotalL.Text = (double.Parse(cmbPrecoL.Text.Substring(2))
+                * int.Parse(txtQtdL.Text)).ToString("C");
         }
 
         private void btnAddLanche_Click(object sender, EventArgs e)
         {
             dgvPedidos.Rows.Add(++contItem,
                 cmbLanche.SelectedItem,
-                numQtdLanche.Text,
+                txtQtdL.Text,
                 cmbPrecoL.SelectedItem,
                 lblTotalL.Text.Substring(2)
             );
@@ -239,33 +238,27 @@ namespace LanchoneteSabida
 
         }
 
-        private void numQtdBebida_ValueChanged(object sender, EventArgs e)
+        private void txtQtdB_TextChanged(object sender, EventArgs e)
         {
-            if (cmbBebidas.Text != "")
+            if (txtQtdB.Text == "0" || txtQtdB.Text == "")
             {
-                decimal preco = decimal.Parse(cmbPrecoB.Text.Substring(2));
-                decimal quantidade = numQtdBebida.Value;
-
-                lblTotalB.Text = (preco * quantidade).ToString("C");
+                txtQtdB.Text = "1";
             }
+
+            lblTotalB.Text = (double.Parse(cmbPrecoB.Text.Substring(2))
+                * int.Parse(txtQtdB.Text)).ToString("C");
         }
 
         private void cmbBebidas_SelectedIndexChanged(object sender, EventArgs e)
         {
-            button5.Enabled = true;
-            numQtdBebida.Enabled = true;
-
             cmbPrecoB.SelectedIndex = cmbBebidas.SelectedIndex;
-            numQtdBebida.Value = 1;
+            txtQtdB.Text = "1";
 
             if (cmbPrecoB.Text != "")
             {
-                decimal preco = decimal.Parse(cmbPrecoB.Text.Substring(2));
-                decimal quantidade = numQtdBebida.Value;
-
-                lblTotalB.Text = (preco * quantidade).ToString("C");
-
-                numQtdBebida.Focus();
+                lblTotalB.Text = (double.Parse(cmbPrecoB.Text.Substring(2))
+                    * int.Parse(txtQtdB.Text)).ToString("C");
+                txtQtdB.Focus();
             }
         }
 
@@ -429,7 +422,6 @@ namespace LanchoneteSabida
         {
 
         }
-
     }
     }
 
