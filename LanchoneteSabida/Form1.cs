@@ -139,7 +139,7 @@ namespace LanchoneteSabida
         private void button5_Click(object sender, EventArgs e) // Botao Add Bebida
         {
             dgvPedidos.Rows.Add(++contItem, cmbBebidas.SelectedItem,
-                txtQtdB.Text,
+                numQtdBebida.Text,
                 cmbPrecoB.SelectedItem,
                 lblTotalB.Text.Substring(2)
             );
@@ -168,32 +168,34 @@ namespace LanchoneteSabida
 
         private void cmbLanche_SelectedIndexChanged(object sender, EventArgs e)
         {
+            numQtdLanche.Enabled = true;
+
             cmbPrecoL.SelectedIndex = cmbLanche.SelectedIndex;
-            txtQtdL.Text = "1";
+            numQtdLanche.Text = "1";
 
             if (cmbPrecoL.Text != "")
             {
                 lblTotalL.Text = (double.Parse(cmbPrecoL.Text.Substring(2))
-                    * int.Parse(txtQtdL.Text)).ToString("C");
-                txtQtdL.Focus();
+                    * int.Parse(numQtdLanche.Text)).ToString("C");
+                numQtdLanche.Focus();
             }
         }
 
-        private void txtQtdL_TextChanged(object sender, EventArgs e)
+        private void numQtdLanche_ValueChanged(object sender, EventArgs e)
         {
-            if (txtQtdL.Text == "0" || txtQtdL.Text == "")
+            if (numQtdLanche.Text == "0" || numQtdLanche.Text == "")
             {
-                txtQtdL.Text = "1";
+                numQtdLanche.Text = "1";
             }
             lblTotalL.Text = (double.Parse(cmbPrecoL.Text.Substring(2))
-                * int.Parse(txtQtdL.Text)).ToString("C");
+                * int.Parse(numQtdLanche.Text)).ToString("C");
         }
 
         private void btnAddLanche_Click(object sender, EventArgs e)
         {
             dgvPedidos.Rows.Add(++contItem,
                 cmbLanche.SelectedItem,
-                txtQtdL.Text,
+                numQtdLanche.Text,
                 cmbPrecoL.SelectedItem,
                 lblTotalL.Text.Substring(2)
             );
@@ -238,27 +240,29 @@ namespace LanchoneteSabida
 
         }
 
-        private void txtQtdB_TextChanged(object sender, EventArgs e)
+        private void numQtdBebida_ValueChanged(object sender, EventArgs e)
         {
-            if (txtQtdB.Text == "0" || txtQtdB.Text == "")
+            if (numQtdBebida.Text == "0" || numQtdBebida.Text == "")
             {
-                txtQtdB.Text = "1";
+                numQtdBebida.Text = "1";
             }
 
             lblTotalB.Text = (double.Parse(cmbPrecoB.Text.Substring(2))
-                * int.Parse(txtQtdB.Text)).ToString("C");
+                * int.Parse(numQtdBebida.Text)).ToString("C");
         }
 
         private void cmbBebidas_SelectedIndexChanged(object sender, EventArgs e)
         {
+            numQtdBebida.Enabled = true;
+
             cmbPrecoB.SelectedIndex = cmbBebidas.SelectedIndex;
-            txtQtdB.Text = "1";
+            numQtdBebida.Text = "1";
 
             if (cmbPrecoB.Text != "")
             {
                 lblTotalB.Text = (double.Parse(cmbPrecoB.Text.Substring(2))
-                    * int.Parse(txtQtdB.Text)).ToString("C");
-                txtQtdB.Focus();
+                    * int.Parse(numQtdBebida.Text)).ToString("C");
+                numQtdBebida.Focus();
             }
         }
 
